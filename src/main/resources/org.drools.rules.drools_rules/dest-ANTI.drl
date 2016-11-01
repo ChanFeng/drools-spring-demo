@@ -1,0 +1,36 @@
+package org.drools.rules.drools_rules;
+dialect  "mvel"
+
+rule "dest-ANTI"
+    when
+    then
+end
+
+import org.drools.rules.drools_rules.FormulasOptionVO;
+import org.drools.rules.drools_rules.DoubleUtil;
+
+// ANTI-TERROR COMPLIANCE BILL MIN
+global java.lang.Double anti_min;
+
+// 安检费
+rule "ANTI-MIN"
+    salience 49
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setItemTotal(anti_min);
+end
+
+rule "ANTI"
+    salience 48
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setUnit_price(Double.valueOf(3.45));
+        if ($vo.getUnit_price() > $vo.getItemTotal()) {
+            $vo.setItemTotal($vo.getUnit_price());
+        }
+        $vo.setTotal(DoubleUtil.add($vo.getTotal(), $vo.getItemTotal()));
+end

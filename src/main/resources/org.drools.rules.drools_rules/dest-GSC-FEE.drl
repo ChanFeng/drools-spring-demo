@@ -1,0 +1,52 @@
+package org.drools.rules.drools_rules;
+
+import org.drools.rules.drools_rules.FormulasOptionVO;
+import org.drools.rules.drools_rules.DoubleUtil;
+
+// GSC-FEE MIN
+global java.lang.Double gsc_fee_min;
+
+// 港杂费
+rule "GSC-FEE MIN"
+    salience 69
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setItemTotal(gsc_fee_min);
+end
+
+rule "GSC-FEE"
+    salience 68
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setUnit_price(Double.valueOf(4.5));
+        Double itemTotal = DoubleUtil.mul($vo.getWeight(), $vo.getUnit_price());
+        if (itemTotal > $vo.getItemTotal()) {
+            $vo.setItemTotal(itemTotal);
+        }
+end
+
+rule "GSC-FEE-01"
+    salience 67
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setUnit_price(Double.valueOf(4.5));
+        Double itemTotal = DoubleUtil.mul($vo.getVolume(), $vo.getUnit_price());
+        if (itemTotal > $vo.getItemTotal()) {
+            $vo.setItemTotal(itemTotal);
+        }
+end
+
+rule "GSC-FEE-END"
+    salience 65
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setTotal(DoubleUtil.add($vo.getTotal(), $vo.getItemTotal()));
+end

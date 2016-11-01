@@ -1,0 +1,37 @@
+package drools.rules.sample;
+
+//导入自定义的实体类
+import org.drools.spring.demo.simple.Message;
+
+//规则名
+rule "Hello World"
+
+    salience 100
+
+    //条件语句
+    when
+        //当该实体的status属性为HELLO的时候，将该实体Message赋值给m，实体的message属性赋值给myMessage
+        $m : Message( status == Message.HELLO, myMessage : message )
+
+    //满足条件之后要做的事情
+    then
+        //输出myMessage
+        System.out.println( myMessage );
+        //更改Message
+        $m.setMessage( "Goodbye world" );
+        $m.setStatus( Message.GOODBYE );
+        //更新实体，会重新触发规则
+        update( $m );
+end
+
+//第二个规则
+rule "GoodBye"
+    salience 100
+    when
+        //判断status是否与常量Message.GOODBYE相同, 赋值message到myMessage
+        Message( status == Message.GOODBYE, myMessage : message )
+    then
+        //输出myMessage
+        System.out.println( myMessage );
+end
+

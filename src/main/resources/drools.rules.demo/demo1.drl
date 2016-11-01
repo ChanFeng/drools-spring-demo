@@ -1,0 +1,10 @@
+package drools.rules.demo;
+
+dialect  "mvel"
+
+rule "demo1"
+    when
+        eval(true);
+    then
+        System.out.println("Hello ChenFeng!");
+end

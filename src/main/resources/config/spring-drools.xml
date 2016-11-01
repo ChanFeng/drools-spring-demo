@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:kie="http://drools.org/schema/kie-spring"
+       xsi:schemaLocation="
+              http://drools.org/schema/kie-spring https://raw.githubusercontent.com/droolsjbpm/droolsjbpm-integration/master/kie-spring/src/main/resources/org/kie/spring/kie-spring-6.0.0.xsd
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+             http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd">
+
+    <!--每5分钟扫描是否有新版本文件-->
+    <!--<kie:import releaseId-ref="ksession-releaseId" enableScanner="true" scannerInterval="300000"/>
+
+    <kie:releaseId id="ksession-releaseId" groupId="demo" artifactId="test_web_drools" version="1.0"/>
+
+    <kie:kmodule id="kmodule">
+        <kie:kbase name="personKb" packages="demo.test_web_drools">
+            <kie:ksession name="personKs" type="stateful" >
+            </kie:ksession>
+        </kie:kbase>
+    </kie:kmodule>-->
+
+    <!-- -Dspring.profiles.active="development" -->
+    <!--<beans profile="development">
+        <kie:kmodule id="test-kmodule1">
+            <kie:kbase name="drl_kiesample" packages="drl_kiesample">
+                <kie:ksession name="ksession1" type="stateful">
+                    <kie:consoleLogger/>
+                    <kie:batch>
+                        <kie:insert-object ref="person2"/>
+                        <kie:set-global identifier="persons" ref="personsList"/>
+                        <kie:fire-all-rules max="10"/>
+                    </kie:batch>
+                </kie:ksession>
+            </kie:kbase>
+        </kie:kmodule>
+    </beans>-->
+
+
+    <!-- SpringContextHolder.getBean('xxxx')方式获取bean -->
+    <bean id="kiePostProcessor" class="org.kie.spring.KModuleBeanFactoryPostProcessor"/>
+
+    <!-- 注解方式获取bean -->
+    <bean id="kieAnnotationPostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>
+
+    <kie:kmodule id="test-kmodule">
+        <kie:kbase name="test_kbase" packages="drools.rules.sample">
+            <kie:ksession name="ksession1" type="stateful">
+                <kie:consoleLogger/>
+            </kie:ksession>
+        </kie:kbase>
+
+        <kie:kbase name="test_kbase2" packages="drools.rules.demo">
+            <kie:ksession name="ksessionDemo1" type="stateful">
+            </kie:ksession>
+        </kie:kbase>
+
+        <kie:kbase name="pointKb" packages="drools.rules.point">
+            <kie:ksession name="ksession-pointDomain" type="stateful">
+            </kie:ksession>
+        </kie:kbase>
+
+         <kie:kbase name="loginKb" packages="drools.rules.login">
+            <kie:ksession name="ksessionLogin" type="stateful" >
+            </kie:ksession>
+        </kie:kbase>
+
+    </kie:kmodule>
+
+    <!--目的港计算器测试 drools-->
+    <!--每10秒钟扫描是否有新版本文件-->
+    <!--<kie:import releaseId-ref="dest-cal-releaseId" enableScanner="true" scannerInterval="10000"/>
+    <kie:releaseId id="dest-cal-releaseId" groupId="org.drools.rules" artifactId="drools-rules" version="1.0.0-SNAPSHOT"/>
+-->
+    <kie:kmodule id="dest-cal-kmodule">
+        <kie:kbase name="destCalKb" packages="org.drools.rules.drools_rules">
+            <kie:ksession name="destCalKs" type="stateful" >
+                <kie:batch>
+                    <kie:set-global identifier="quray_dues_min"><value type="java.lang.Double">47.96</value></kie:set-global>
+                    <kie:set-global identifier="lcl_svc_min"><value type="java.lang.Double">30</value></kie:set-global>
+                    <kie:set-global identifier="do_fee_min"><value type="java.lang.Double">0</value></kie:set-global>
+                    <kie:set-global identifier="gsc_fee_min"><value type="java.lang.Double">4.5</value></kie:set-global>
+                    <kie:set-global identifier="ers_min"><value type="java.lang.Double">6</value></kie:set-global>
+                    <kie:set-global identifier="anti_min"><value type="java.lang.Double">0</value></kie:set-global>
+                    <kie:set-global identifier="cisf_min"><value type="java.lang.Double">50</value></kie:set-global>
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+    </kie:kmodule>
+
+    <!--<kie:globals>
+
+    </kie:globals>-->
+
+   <!-- <kie:date-formats>
+        <bean id="" class="java.text.SimpleDateFormat">
+            <constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+        </bean>
+    </kie:date-formats>-->
+
+</beans>

@@ -1,0 +1,30 @@
+package org.drools.rules.drools_rules;
+
+import org.drools.rules.drools_rules.FormulasOptionVO;
+import org.drools.rules.drools_rules.DoubleUtil;
+
+// DO-FEE MIN
+global java.lang.Double do_fee_min;
+
+// 换单费
+rule "DO-FEE-MIN"
+    salience 79
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setItemTotal(do_fee_min);
+end
+
+rule "DO-FEE"
+    salience 78
+    lock-on-active true
+    when
+        $vo : FormulasOptionVO()
+    then
+        $vo.setUnit_price(Double.valueOf(55));
+        if ($vo.getUnit_price() > $vo.getItemTotal()) {
+            $vo.setItemTotal($vo.getUnit_price());
+        }
+        $vo.setTotal(DoubleUtil.add($vo.getTotal(), $vo.getItemTotal()));
+end
